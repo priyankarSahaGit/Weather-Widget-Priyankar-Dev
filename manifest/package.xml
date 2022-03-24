@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <types>
+        <members>FetchWeatherCtrl</members>
+        <name>ApexClass</name>
+    </types>
+    <types>
+        <members>weatherWidgetDetail</members>
+        <name>LightningComponentBundle</name>
+    </types>
+    <types>
+        <members>Open_Weather_Map__mdt</members>
+        <name>CustomObject</name>
+    </types>
+    <types>
+        <members>Open_Weather_Map__mdt.Current_Weather</members>
+        <name>CustomMetadata</names>
+    </types>
+    <types>
+        <members>Open_Weather_API</members>
+        <members>Open_Weather_API_Detailed</members>
+        <name>NamedCredential</name>
+    </types>
+    <version>54.0</version>
+</Package>

@@ -1,0 +1,78 @@
+<template>
+    <lightning-card  variant="Narrow"  title="Weather" icon-name="custom:custom3" class="weatherCard slds-is-relative">
+        <lightning-layout multiple-rows class="slds-p-around_xx-small" vertical-align="end">
+            <lightning-layout-item size="10">
+                <p>
+                    <span>
+                        <lightning-input name="city-search" type="search" onchange={cityOnChangeHandler} placeholder="Search a City" onkeyup={handleKeyUp}></lightning-input>
+                    </span>
+                </p>
+            </lightning-layout-item>
+            <lightning-layout-item size="1">
+                <p>
+                    <lightning-button variant="brand" title="Search the City weather" icon-name="utility:search" onclick={citySearchHandler}></lightning-button>
+                </p>
+            </lightning-layout-item>
+        </lightning-layout>
+        <template if:false={isLoaded}>
+            <lightning-spinner alternative-text="Loading" variant="brand" size="small"></lightning-spinner>
+        </template>
+        <template if:true={isLoaded}>
+            <template if:false={isSearchLoaded}>
+                <lightning-spinner alternative-text="Loading" variant="brand" size="small"></lightning-spinner>
+            </template>
+            <lightning-layout multiple-rows class="slds-p-around_xx-small">
+                <lightning-layout-item size="6">
+                    <p class="slds-p-around_xx-small slds-text-heading_large">
+                        <span class="slds-p-around_xx-small">{temp}{degreeCelcius}</span>
+                        <span class="slds-p-around_xx-small">
+                            <lightning-icon icon-name={weatherLogo} size="medium"></lightning-icon>
+                        </span>
+                        <span class="slds-p-around_xx-small slds-text-title_caps">{weatherCondition}</span>
+                    </p>
+                </lightning-layout-item>
+                <lightning-layout-item size="6">
+                    <div class="slds-p-around_xx-small">
+                        <p>
+                            <span class="slds-text-heading_small">{city}, {country}</span> 
+                            <span class="slds-p-around_xx-small">
+                                <lightning-icon icon-name="utility:checkin" size="small"></lightning-icon>
+                            </span>
+                        </p>
+                        <p>
+                            <span class="slds-text-heading_small"> {currentTime} , {currentDate}</span>
+                        </p> 
+                    </div>
+                </lightning-layout-item>
+            </lightning-layout>
+            <div class="slds-p-around_small">
+                <p class="slds-p-around_xx-small slds-text-title">
+                    <span class="slds-p-around_xx-small"><lightning-icon icon-name="standard:feed" size="x-small"></lightning-icon></span>
+                    <span class="slds-p-around_xx-small">Feels like {feels_like}{degreeCelcius}</span>
+                </p>
+                <p class="slds-p-around_xx-small slds-text-title">
+                    <span class="slds-p-around_xx-small"><lightning-icon icon-name="custom:custom97" size="x-small"></lightning-icon></span>
+                    <span class="slds-p-around_xx-small">Max/Min Temperature: {temp_max}{degreeCelcius}/{temp_min}{degreeCelcius}</span>
+                </p>
+                <p class="slds-p-around_xx-small slds-text-title">
+                    <span class="slds-p-around_xx-small"><lightning-icon icon-name="custom:custom2" size="x-small"></lightning-icon></span>
+                    <span class="slds-p-around_xx-small">Wind Speed: {wind_speed} km/h</span>
+                </p>
+                <p class="slds-p-around_xx-small slds-text-title">
+                    <span class="slds-p-around_xx-small"><lightning-icon icon-name="standard:field_sales" size="x-small"></lightning-icon></span>
+                    <span class="slds-p-around_xx-small">Humidity: {wind_speed} %</span>
+                </p>
+                <p class="slds-p-around_xx-small slds-text-title">
+                    <span class="slds-p-around_xx-small"><lightning-icon icon-name="custom:custom3" size="x-small"></lightning-icon> {sunriseTime} </span>
+                    <span class="slds-p-around_xx-small"><lightning-icon icon-name="custom:custom10" size="x-small"></lightning-icon> {sunsetTime} </span>
+                </p>
+                <br/>
+                <br/>
+                <p class="slds-p-around_xx-small slds-text-title slds-text-align_center">
+                    <span class="slds-p-around_xx-small">Data fetched from <a href="https://openweathermap.org/" target="_blank">OpenWeather</a> 
+                    </span>
+                </p>
+            </div>
+        </template>
+    </lightning-card>
+</template>
