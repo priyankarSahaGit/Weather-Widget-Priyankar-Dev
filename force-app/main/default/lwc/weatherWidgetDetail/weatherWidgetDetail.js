@@ -1,5 +1,6 @@
 import { LightningElement, track, wire, api } from 'lwc';
 import getCurrentWeather from '@salesforce/apex/FetchWeatherCtrl.getCurrentWeather';
+import getWeatherForecast from '@salesforce/apex/FetchWeatherCtrl.getWeatherForecast';
 import getCityCoordinates from '@salesforce/apex/FetchWeatherCtrl.getCityCoordinates';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
@@ -8,7 +9,9 @@ export default class WeatherWidgetDetail extends LightningElement {
     @track longitude;
     @track isLoaded = false;
     @track isSearchLoaded = false;
+    @track isForecastLoaded = false;
     @track weatherData = {};
+    @track forecastDailyData = [];
     @track weatherLogo;
     @track temp;
     @track temp_min;
@@ -40,6 +43,7 @@ export default class WeatherWidgetDetail extends LightningElement {
                 this.latitude = position.coords.latitude;
                 this.longitude = position.coords.longitude;
                 this.fetchCurrentWeather();
+                this.fetchWeatherForecast();
             },
             (e) => {
                 this.strError = e.message;
@@ -81,11 +85,43 @@ export default class WeatherWidgetDetail extends LightningElement {
                 this.country = regionNames.of(this.weatherData.sys.country);
                 this.sunriseTime = this.formatUnixToAMPM(this.weatherData.sys.sunrise);
                 this.sunsetTime = this.formatUnixToAMPM(this.weatherData.sys.sunset);
-                this.currentDate = this.formatUnixToDate(this.weatherData.dt);
+                this.currentDate = this.formatUnixToDate(this.weatherData.dt, true);
                 this.currentTime = this.formatUnixToAMPM(this.weatherData.dt);
                 this.weatherCondition = this.weatherData.weather[0].main;
                 this.isLoaded = true;
                 this.isSearchLoaded = true;
+            }
+        }).catch(err => console.log(err));
+    }
+
+    fetchWeatherForecast(event){
+        getWeatherForecast({latitude : this.latitude, longitude : this.longitude})
+        .then(data => {
+            this.forecastDailyData = JSON.parse(data).daily;
+            console.log('---Forecast Fetched---',this.forecastDailyData);
+            if(this.forecastDailyData){
+                this.forecastDailyData.forEach(dailyData => {
+                    dailyData.formattedDate = this.formatUnixToDate(dailyData.dt, false);
+                    dailyData.weatherCondition = dailyData.weather[0].main;
+                    if(dailyData.weather[0].main == 'Rain'){
+                        dailyData.weatherLogo = 'standard:calibration';
+                    }
+                    else if(dailyData.weather[0].main == 'Clear'){
+                        dailyData.weatherLogo = 'custom:custom3';
+                    }
+                    else if(dailyData.weather[0].main == 'Clouds'){
+                        dailyData.weatherLogo = 'standard:default';
+                    }
+                    else if(dailyData.weather[0].main == 'Snow'){
+                        dailyData.weatherLogo = 'standard:password';
+                    }
+                    else{
+                        dailyData.weatherLogo = 'custom:custom3';
+                    }
+                    console.log('Weather Logo',dailyData.weatherLogo);
+                });
+                this.isLoaded = true;
+                this.isForecastLoaded = true;
             }
         }).catch(err => console.log(err));
     }
@@ -104,6 +140,7 @@ export default class WeatherWidgetDetail extends LightningElement {
     citySearchHandler(event){
         if(this.cityQuery.length > 0){
             this.isSearchLoaded = false;
+            this.isForecastLoaded = false;
         getCityCoordinates({cityName : this.cityQuery})
         .then(data => {
             var coordinateData = JSON.parse(data)[0];
@@ -112,9 +149,11 @@ export default class WeatherWidgetDetail extends LightningElement {
                 this.latitude = coordinateData.lat;
                 this.longitude = coordinateData.lon;
                 this.fetchCurrentWeather();
+                this.fetchWeatherForecast();
             } else{
                 this.isLoaded = true;
                 this.isSearchLoaded = true;
+                this.isForecastLoaded = true;
                 const evt = new ShowToastEvent({
                 title: '',
                 message: 'City not found',
@@ -126,6 +165,7 @@ export default class WeatherWidgetDetail extends LightningElement {
             console.log(err);
             this.isLoaded = true;
             this.isSearchLoaded = true;
+            this.isForecastLoaded = true;
             const evt = new ShowToastEvent({
                 title: '',
                 message: 'Some error occurred',
@@ -148,7 +188,7 @@ export default class WeatherWidgetDetail extends LightningElement {
         return strTime;
     }
 
-    formatUnixToDate(unixTimestamp){
+    formatUnixToDate(unixTimestamp, yearFlag){
         const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
         const weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
         var currentDate = new Date(unixTimestamp * 1000);
@@ -156,7 +196,12 @@ export default class WeatherWidgetDetail extends LightningElement {
         var year = currentDate.getFullYear();
         var month = months[currentDate.getMonth()];
         var date = currentDate.getDate();
-        var return_date = day + ' ' + date + ' ' + month + ' ' + year;
+        if(yearFlag){
+            var return_date = day + ', ' + date + ' ' + month + ' ' + year;
+        }
+        else{
+            var return_date = day + ', ' + date + ' ' + month;
+        }
         return return_date;
     }
 }
