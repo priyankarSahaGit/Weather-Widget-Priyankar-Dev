@@ -20,56 +20,99 @@
         <lightning-tabset class="slds-tabs_default slds-tabs_medium">
             <lightning-tab label="Today"> 
                 <template if:true={isLoaded}>
-                    <template if:false={isSearchLoaded}>
-                        <lightning-spinner alternative-text="Loading" variant="brand" size="small"></lightning-spinner>
-                    </template>
-                    <lightning-layout multiple-rows class="slds-p-around_xx-small">
-                        <lightning-layout-item size="6">
-                            <p class="slds-p-around_xx-small slds-text-heading_large">
-                                <span class="slds-p-around_xx-small">{temp}{degreeCelcius}</span>
-                                <span class="slds-p-around_xx-small">
-                                    <lightning-icon icon-name={weatherLogo} size="medium"></lightning-icon>
-                                </span>
-                                <span class="slds-p-around_xx-small slds-text-title_caps">{weatherCondition}</span>
-                            </p>
-                        </lightning-layout-item>
-                        <lightning-layout-item size="6">
-                            <div class="slds-p-around_xx-small">
-                                <p>
-                                    <span class="slds-text-heading_small">{city}, {country}</span> 
+                    <div class="slds-scrollable_y" style="height:20rem">
+                        <template if:false={isSearchLoaded}>
+                            <lightning-spinner alternative-text="Loading" variant="brand" size="small"></lightning-spinner>
+                        </template>
+                        <lightning-layout multiple-rows class="slds-p-around_xx-small">
+                            <lightning-layout-item size="6">
+                                <p class="slds-p-around_xx-small slds-text-heading_large">
+                                    <span class="slds-p-around_xx-small">{temp}{degreeCelcius}</span>
                                     <span class="slds-p-around_xx-small">
-                                        <lightning-icon icon-name="utility:checkin" size="small"></lightning-icon>
+                                        <lightning-icon icon-name={weatherLogo} size="medium"></lightning-icon>
                                     </span>
+                                    <span class="slds-p-around_xx-small slds-text-title_caps">{weatherCondition}</span>
                                 </p>
-                                <p>
-                                    <span class="slds-text-heading_small">{currentDate}</span>
-                                </p> 
-                            </div>
-                        </lightning-layout-item>
-                    </lightning-layout>
-                    <div class="slds-p-around_small">
-                        <p class="slds-p-around_xx-small slds-text-title">
-                            <span class="slds-p-around_xx-small"><lightning-icon icon-name="standard:feed" size="x-small"></lightning-icon></span>
-                            <span class="slds-p-around_xx-small">Feels like {feels_like}{degreeCelcius}</span>
-                        </p>
-                        <p class="slds-p-around_xx-small slds-text-title">
-                            <span class="slds-p-around_xx-small"><lightning-icon icon-name="custom:custom97" size="x-small"></lightning-icon></span>
-                            <span class="slds-p-around_xx-small">Max/Min Temperature: {temp_max}{degreeCelcius}/{temp_min}{degreeCelcius}</span>
-                        </p>
-                        <p class="slds-p-around_xx-small slds-text-title">
-                            <span class="slds-p-around_xx-small"><lightning-icon icon-name="custom:custom2" size="x-small"></lightning-icon></span>
-                            <span class="slds-p-around_xx-small">Wind Speed: {wind_speed} km/h</span>
-                        </p>
-                        <p class="slds-p-around_xx-small slds-text-title">
-                            <span class="slds-p-around_xx-small"><lightning-icon icon-name="standard:field_sales" size="x-small"></lightning-icon></span>
-                            <span class="slds-p-around_xx-small">Humidity: {wind_speed} %</span>
-                        </p>
-                        <p class="slds-p-around_xx-small slds-text-title">
-                            <span class="slds-p-around_xx-small"><lightning-icon icon-name="custom:custom3" size="x-small"></lightning-icon> {sunriseTime} </span>
-                            <span class="slds-p-around_xx-small"><lightning-icon icon-name="custom:custom10" size="x-small"></lightning-icon> {sunsetTime} </span>
-                        </p>
-                    </div>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="6">
+                                <div class="slds-p-around_xx-small">
+                                    <p>
+                                        <span class="slds-text-heading_small">{city}, {country}</span> 
+                                        <span class="slds-p-around_xx-small">
+                                            <lightning-icon icon-name="utility:checkin" size="small"></lightning-icon>
+                                        </span>
+                                    </p>
+                                    <p>
+                                        <span class="slds-text-heading_small">{currentDate}</span>
+                                    </p> 
+                                </div>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="12" class="slds-p-around_xx-small"></lightning-layout-item>
+                            <lightning-layout-item size="12" class="slds-p-around_xx-small"></lightning-layout-item>
+                        </lightning-layout>
+                        <div class="slds-p-around_small">
+                            <p class="slds-p-around_xx-small slds-text-heading_small">
+                                <span class="slds-p-around_xx-small"><lightning-icon icon-name="standard:feed" size="small"></lightning-icon></span>
+                                <span class="slds-p-around_xx-small">Feels like {feels_like}{degreeCelcius}</span>
+                            </p>
+                            <p class="slds-p-around_xx-small slds-text-heading_small">
+                                <span class="slds-p-around_xx-small"><lightning-icon icon-name="custom:custom97" size="small"></lightning-icon></span>
+                                <span class="slds-p-around_xx-small">Max/Min Temperature: {temp_max}{degreeCelcius}/{temp_min}{degreeCelcius}</span>
+                            </p>
+                            <p class="slds-p-around_xx-small slds-text-heading_small">
+                                <span class="slds-p-around_xx-small"><lightning-icon icon-name="custom:custom2" size="small"></lightning-icon></span>
+                                <span class="slds-p-around_xx-small">Wind Speed: {wind_speed} km/h</span>
+                            </p>
+                            <p class="slds-p-around_xx-small slds-text-heading_small">
+                                <span class="slds-p-around_xx-small"><lightning-icon icon-name="standard:field_sales" size="small"></lightning-icon></span>
+                                <span class="slds-p-around_xx-small">Humidity: {wind_speed} %</span>
+                            </p>
+                            <p class="slds-p-around_xx-small slds-text-heading_small">
+                                <span class="slds-p-around_xx-small"><lightning-icon icon-name="standard:stage_collection" size="small"></lightning-icon></span>
+                                <span class="slds-p-around_xx-small">UV Index: {uvi}</span>
+                            </p>
+                            <p class="slds-p-around_xx-small slds-text-heading_small">
+                                <span class="slds-p-around_xx-small"><lightning-icon icon-name="custom:custom3" size="small"></lightning-icon> {sunriseTime} </span>
+                                <span class="slds-p-around_xx-small"><lightning-icon icon-name="custom:custom10" size="small"></lightning-icon> {sunsetTime} </span>
+                            </p>
+                        </div>
+                    </div> 
                 </template> 
+            </lightning-tab>
+            <lightning-tab label="24 Hours Data">
+                <template if:false={isHourlyLoaded}>
+                    <div class="slds-p-around_xx-small">
+                        <lightning-spinner alternative-text="Loading" variant="brand" size="small"></lightning-spinner>
+                    </div>
+                </template>
+                <template if:true={isHourlyLoaded}>
+                    <div class="slds-scrollable_y" style="height:20rem">
+                        <lightning-layout multiple-rows class="slds-p-around_xx-small">
+                            <template for:each={forecastHourlyData} for:item="hourlyObj" for:index="indexHourly">
+                                <lightning-layout-item size="5" key={hourlyObj}>
+                                    <p class="slds-text-title">
+                                        {hourlyObj.formattedTime},{hourlyObj.formattedDate}
+                                    </p>
+                                    <p class="slds-p-around_xx-small slds-text-title">{hourlyObj.weatherCondition}</p>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="4" key={hourlyObj}></lightning-layout-item>
+                                <lightning-layout-item size="3" key={hourlyObj}>
+                                    <p>
+                                        <span class="slds-p-around_xx-small">
+                                            <lightning-icon icon-name={hourlyObj.weatherLogo} size="small"></lightning-icon>
+                                        </span>
+                                        <span class="slds-text-title">
+                                            {hourlyObj.temp}{degreeCelcius}
+                                        </span>
+                                    </p>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" class="slds-p-around_xx-small" key={hourlyObj}>
+                                    <div class="slds-border_bottom"></div>
+                                </lightning-layout-item>
+                            </template>
+                        </lightning-layout>
+                    </div>
+                </template>                
             </lightning-tab>
             <lightning-tab label="7 days"> 
                 <template if:false={isForecastLoaded}>
@@ -78,30 +121,32 @@
                     </div>
                 </template>
                 <template if:true={forecastDailyData}>
-                    <lightning-layout multiple-rows class="slds-p-around_xx-small">
-                        <template for:each={forecastDailyData} for:item="dailyObj" for:index="indexDaily">
-                            <lightning-layout-item size="6" key={dailyObj}>
-                                <p class="slds-text-title">
-                                    {dailyObj.formattedDate}
-                                </p>
-                                <p class="slds-p-around_xx-small slds-text-title">{dailyObj.weatherCondition}</p>
-                            </lightning-layout-item>
-                            <lightning-layout-item size="1" key={dailyObj}></lightning-layout-item>
-                            <lightning-layout-item size="5" key={dailyObj}>
-                                <p>
-                                    <span class="slds-p-around_xx-small">
-                                        <lightning-icon icon-name={dailyObj.weatherLogo} size="small"></lightning-icon>
-                                    </span>
-                                    <span class="slds-text-title">
-                                        {dailyObj.temp.day}{degreeCelcius} / {dailyObj.temp.night}{degreeCelcius}
-                                    </span>
-                                </p>
-                            </lightning-layout-item>
-                            <lightning-layout-item size="12" class="slds-p-around_xx-small" key={dailyObj}>
-                                <div class="slds-border_bottom"></div>
-                            </lightning-layout-item>
-                        </template>
-                    </lightning-layout>
+                    <div class="slds-scrollable_y" style="height:20rem">
+                        <lightning-layout multiple-rows class="slds-p-around_xx-small">
+                            <template for:each={forecastDailyData} for:item="dailyObj" for:index="indexDaily">
+                                <lightning-layout-item size="6" key={dailyObj}>
+                                    <p class="slds-text-title">
+                                        {dailyObj.formattedDate}
+                                    </p>
+                                    <p class="slds-p-around_xx-small slds-text-title">{dailyObj.weatherCondition}</p>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="1" key={dailyObj}></lightning-layout-item>
+                                <lightning-layout-item size="5" key={dailyObj}>
+                                    <p>
+                                        <span class="slds-p-around_xx-small">
+                                            <lightning-icon icon-name={dailyObj.weatherLogo} size="small"></lightning-icon>
+                                        </span>
+                                        <span class="slds-text-title">
+                                            {dailyObj.temp.day}{degreeCelcius} / {dailyObj.temp.night}{degreeCelcius}
+                                        </span>
+                                    </p>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" class="slds-p-around_xx-small" key={dailyObj}>
+                                    <div class="slds-border_bottom"></div>
+                                </lightning-layout-item>
+                            </template>
+                        </lightning-layout>
+                    </div>
                 </template> 
             </lightning-tab>
         </lightning-tabset>

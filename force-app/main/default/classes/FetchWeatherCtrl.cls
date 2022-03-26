@@ -33,7 +33,7 @@ public with sharing class FetchWeatherCtrl {
             Open_Weather_Map__mdt weatherCode = Open_Weather_Map__mdt.getInstance('Current_Weather');
             String location = 'lat=' + latitude + '&' + 'lon=' + longitude;
             HttpRequest req = new HttpRequest();
-            req.setEndpoint('callout:Open_Weather_API_Detailed?' + location + '&exclude=current,minutely,alerts&appid=' + weatherCode.App_Key__c + '&units=metric');
+            req.setEndpoint('callout:Open_Weather_API_Detailed?' + location + '&exclude=minutely,alerts&appid=' + weatherCode.App_Key__c + '&units=metric');
             req.setMethod('GET');
             Http http = new Http();
             HTTPResponse res = http.send(req);

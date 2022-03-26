@@ -10,8 +10,12 @@ export default class WeatherWidgetDetail extends LightningElement {
     @track isLoaded = false;
     @track isSearchLoaded = false;
     @track isForecastLoaded = false;
+    @track uvi;
+    @track isHourlyLoaded = false;
     @track weatherData = {};
+    @track currentData = {};
     @track forecastDailyData = [];
+    @track forecastHourlyData = [];
     @track weatherLogo;
     @track temp;
     @track temp_min;
@@ -97,8 +101,22 @@ export default class WeatherWidgetDetail extends LightningElement {
     fetchWeatherForecast(event){
         getWeatherForecast({latitude : this.latitude, longitude : this.longitude})
         .then(data => {
+            this.currentData = JSON.parse(data).current;
             this.forecastDailyData = JSON.parse(data).daily;
+            this.forecastHourlyData = JSON.parse(data).hourly.slice(0,24);
+            if(this.currentData.uvi >= 11){
+                this.uvi = 'Extreme';
+            }else if(this.currentData.uvi >= 8 && this.currentData.uvi < 11){
+                this.uvi = 'Very high';
+            }else if(this.currentData.uvi >= 6 && this.currentData.uvi <= 7){
+                this.uvi = 'High';
+            }else if(this.currentData.uvi >= 3 && this.currentData.uvi <= 5){
+                this.uvi = 'Moderate';
+            }else if(this.currentData.uvi <= 2){
+                this.uvi = 'Low';
+            }
             console.log('---Forecast Fetched---',this.forecastDailyData);
+            console.log('---Hourly Fetched---',this.forecastHourlyData);
             if(this.forecastDailyData){
                 this.forecastDailyData.forEach(dailyData => {
                     dailyData.formattedDate = this.formatUnixToDate(dailyData.dt, false);
@@ -118,11 +136,33 @@ export default class WeatherWidgetDetail extends LightningElement {
                     else{
                         dailyData.weatherLogo = 'custom:custom3';
                     }
-                    console.log('Weather Logo',dailyData.weatherLogo);
                 });
-                this.isLoaded = true;
                 this.isForecastLoaded = true;
             }
+            if(this.forecastHourlyData){
+                this.forecastHourlyData.forEach(hourlyData => {
+                    hourlyData.formattedDate = this.formatUnixToDate(hourlyData.dt, false);
+                    hourlyData.formattedTime = this.formatUnixToAMPM(hourlyData.dt);
+                    hourlyData.weatherCondition = hourlyData.weather[0].main;
+                    if(hourlyData.weather[0].main == 'Rain'){
+                        hourlyData.weatherLogo = 'standard:calibration';
+                    }
+                    else if(hourlyData.weather[0].main == 'Clear'){
+                        hourlyData.weatherLogo = 'custom:custom3';
+                    }
+                    else if(hourlyData.weather[0].main == 'Clouds'){
+                        hourlyData.weatherLogo = 'standard:default';
+                    }
+                    else if(hourlyData.weather[0].main == 'Snow'){
+                        hourlyData.weatherLogo = 'standard:password';
+                    }
+                    else{
+                        hourlyData.weatherLogo = 'custom:custom3';
+                    }
+                });
+                this.isHourlyLoaded = true;
+            }
+            this.isLoaded = true;
         }).catch(err => console.log(err));
     }
 
@@ -141,6 +181,7 @@ export default class WeatherWidgetDetail extends LightningElement {
         if(this.cityQuery.length > 0){
             this.isSearchLoaded = false;
             this.isForecastLoaded = false;
+            this.isHourlyLoaded = false;
         getCityCoordinates({cityName : this.cityQuery})
         .then(data => {
             var coordinateData = JSON.parse(data)[0];
@@ -154,6 +195,7 @@ export default class WeatherWidgetDetail extends LightningElement {
                 this.isLoaded = true;
                 this.isSearchLoaded = true;
                 this.isForecastLoaded = true;
+                this.isHourlyLoaded = true;
                 const evt = new ShowToastEvent({
                 title: '',
                 message: 'City not found',
@@ -166,6 +208,7 @@ export default class WeatherWidgetDetail extends LightningElement {
             this.isLoaded = true;
             this.isSearchLoaded = true;
             this.isForecastLoaded = true;
+            this.isHourlyLoaded = false;
             const evt = new ShowToastEvent({
                 title: '',
                 message: 'Some error occurred',
