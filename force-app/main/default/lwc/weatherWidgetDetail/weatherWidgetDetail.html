@@ -39,7 +39,7 @@
                                     <p>
                                         <span class="slds-text-heading_small">{city}, {country}</span> 
                                         <span class="slds-p-around_xx-small">
-                                            <lightning-icon icon-name="utility:checkin" size="small"></lightning-icon>
+                                            <lightning-icon icon-name="utility:checkin" size="x-small"></lightning-icon>
                                         </span>
                                     </p>
                                     <p>
@@ -89,13 +89,13 @@
                     <div class="slds-scrollable_y" style="height:20rem">
                         <lightning-layout multiple-rows class="slds-p-around_xx-small">
                             <template for:each={forecastHourlyData} for:item="hourlyObj" for:index="indexHourly">
-                                <lightning-layout-item size="5" key={hourlyObj}>
+                                <lightning-layout-item size="7" key={hourlyObj}>
                                     <p class="slds-text-title">
                                         {hourlyObj.formattedTime},{hourlyObj.formattedDate}
                                     </p>
                                     <p class="slds-p-around_xx-small slds-text-title">{hourlyObj.weatherCondition}</p>
                                 </lightning-layout-item>
-                                <lightning-layout-item size="4" key={hourlyObj}></lightning-layout-item>
+                                <lightning-layout-item size="2" key={hourlyObj}></lightning-layout-item>
                                 <lightning-layout-item size="3" key={hourlyObj}>
                                     <p>
                                         <span class="slds-p-around_xx-small">

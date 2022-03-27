@@ -121,6 +121,8 @@ export default class WeatherWidgetDetail extends LightningElement {
                 this.forecastDailyData.forEach(dailyData => {
                     dailyData.formattedDate = this.formatUnixToDate(dailyData.dt, false);
                     dailyData.weatherCondition = dailyData.weather[0].main;
+                    dailyData.temp.day = Math.round(dailyData.temp.day);
+                    dailyData.temp.night = Math.round(dailyData.temp.night);
                     if(dailyData.weather[0].main == 'Rain'){
                         dailyData.weatherLogo = 'standard:calibration';
                     }
@@ -144,6 +146,7 @@ export default class WeatherWidgetDetail extends LightningElement {
                     hourlyData.formattedDate = this.formatUnixToDate(hourlyData.dt, false);
                     hourlyData.formattedTime = this.formatUnixToAMPM(hourlyData.dt);
                     hourlyData.weatherCondition = hourlyData.weather[0].main;
+                    hourlyData.temp = Math.round(hourlyData.temp);
                     if(hourlyData.weather[0].main == 'Rain'){
                         hourlyData.weatherLogo = 'standard:calibration';
                     }
