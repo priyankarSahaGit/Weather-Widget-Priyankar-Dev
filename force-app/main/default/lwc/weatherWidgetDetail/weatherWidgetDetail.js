@@ -2,6 +2,7 @@ import { LightningElement, track, wire, api } from 'lwc';
 import getCurrentWeather from '@salesforce/apex/FetchWeatherCtrl.getCurrentWeather';
 import getWeatherForecast from '@salesforce/apex/FetchWeatherCtrl.getWeatherForecast';
 import getCityCoordinates from '@salesforce/apex/FetchWeatherCtrl.getCityCoordinates';
+import getTimezone from '@salesforce/apex/FetchWeatherCtrl.getTimeZone';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
 export default class WeatherWidgetDetail extends LightningElement {
@@ -38,7 +39,8 @@ export default class WeatherWidgetDetail extends LightningElement {
     @api cityQuery = '';
     @track sunriseTime;
     @track sunsetTime;
-    @track weatherCondition;  
+    @track weatherCondition;
+    @track timezoneStr;  
 
     connectedCallback(){
         if (navigator.geolocation) {
@@ -46,6 +48,7 @@ export default class WeatherWidgetDetail extends LightningElement {
                 // Get the Latitude and Longitude from Geolocation API
                 this.latitude = position.coords.latitude;
                 this.longitude = position.coords.longitude;
+                this.fetchTimeZone();
                 this.fetchCurrentWeather();
                 this.fetchWeatherForecast();
             },
@@ -56,6 +59,17 @@ export default class WeatherWidgetDetail extends LightningElement {
                 enableHighAccuracy: true,
             });
         }
+    }
+
+    fetchTimeZone(event){
+        getTimezone({latitude : this.latitude, longitude : this.longitude})
+        .then(data => {
+            var timeZoneData = JSON.parse(data);
+            console.log('---TimeZone Fetched---',timeZoneData);
+            if(timeZoneData){
+                this.timezoneStr = timeZoneData.timeZone;
+            }
+        }).catch(err => console.log(err));
     }
 
     fetchCurrentWeather(event){
@@ -192,6 +206,7 @@ export default class WeatherWidgetDetail extends LightningElement {
             if(coordinateData != undefined){
                 this.latitude = coordinateData.lat;
                 this.longitude = coordinateData.lon;
+                this.fetchTimeZone();
                 this.fetchCurrentWeather();
                 this.fetchWeatherForecast();
             } else{

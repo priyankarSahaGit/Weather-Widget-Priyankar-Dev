@@ -67,5 +67,23 @@ public with sharing class FetchWeatherCtrl {
             throw new AuraHandledException(e.getMessage());
         }
     }
+
+    @AuraEnabled
+    public static string getTimeZone(Decimal latitude, Decimal longitude){
+        try {
+            if(latitude == null || longitude == null){
+                throw new AuraHandledException('Failed to retrieve timezone');
+            }
+            HttpRequest req = new HttpRequest();
+            req.setEndpoint('callout:Timezone_API?' + 'latitude=' + latitude +'&longitude=' + longitude);
+            req.setMethod('GET');
+            Http http = new Http();
+            HTTPResponse res = http.send(req);
+            System.debug('---Print Response Timezone---'+res.getBody());
+            return res.getBody();
+        } catch (Exception e) {
+            throw new AuraHandledException(e.getMessage());
+        }
+    }
     
 }

@@ -19,7 +19,13 @@
     <types>
         <members>Open_Weather_API</members>
         <members>Open_Weather_API_Detailed</members>
+        <members>Timezone_API</members>
         <name>NamedCredential</name>
+    </types>
+    <types>
+        <members>Open_Weather_API</members>
+        <members>Timezone_API</members>
+        <name>RemoteSiteSetting</name>
     </types>
     <version>54.0</version>
 </Package>
