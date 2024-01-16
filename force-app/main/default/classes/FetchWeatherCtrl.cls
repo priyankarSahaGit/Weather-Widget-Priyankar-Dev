@@ -8,6 +8,7 @@ public with sharing class FetchWeatherCtrl {
     public static string getCurrentWeather(Decimal latitude, Decimal longitude){
         try {
             if(latitude == null || longitude == null){
+                system.debug('---Error Occurred---');
                 throw new AuraHandledException('Failed to retrieve coordinates');
             }
             Open_Weather_Map__mdt weatherCode = Open_Weather_Map__mdt.getInstance('Current_Weather');
